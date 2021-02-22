@@ -19,7 +19,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                Tritiyo\\Project\\ProjectServiceProvider"
+                "Tritiyo\\Project\\ProjectServiceProvider"
             ],
         }
     }
