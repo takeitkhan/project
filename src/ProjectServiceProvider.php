@@ -11,7 +11,7 @@ class ProjectServiceProvider extends ServiceProvider {
     { 
         $this->loadRoutesFrom(__DIR__. '/routes/modules/projects.php');
         $this->loadViewsFrom(__DIR__. '/views', 'project');
-        $this->loadMigrationsFrom(__DIR__. '/database/migrations');
+        $this->loadMigrationsFrom(__DIR__. '/Database/Migrations');
     }
 
     public function register()
