@@ -1,5 +1,5 @@
 {
-    "name": "tritiyo/project",
+    "name": "tritiyoerp/project",
     "description": "Project manage on project module",
     "type": "library",
     "license": "MIT",
@@ -10,5 +10,21 @@
         }
     ],
     "minimum-stability": "beta",
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Tritiyo\\Project\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Barryvdh\\Debugbar\\ServiceProvider"
+            ],
+            "aliases": {
+                "Debugbar": "Barryvdh\\Debugbar\\Facade"
+            }
+        }
+    }
 }
+
