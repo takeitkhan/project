@@ -8,8 +8,10 @@ use Tritiyo\Project\Repositories\Project\ProjectInterface;
 class ProjectServiceProvider extends ServiceProvider {
 
     public function boot()
-    {
+    { 
+        //Route
         $this->loadRoutesFrom(__DIR__. '/routes/modules/projects.php');
+        //All View File 
         $this->loadViewsFrom(__DIR__. '/views', 'project');
         $this->loadMigrationsFrom(__DIR__. '/database/migrations');
     }
