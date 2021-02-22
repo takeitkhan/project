@@ -19,11 +19,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Barryvdh\\Debugbar\\ServiceProvider"
+                Tritiyo\\Project\\ProjectServiceProvider"
             ],
-            "aliases": {
-                "Debugbar": "Barryvdh\\Debugbar\\Facade"
-            }
         }
     }
 }
