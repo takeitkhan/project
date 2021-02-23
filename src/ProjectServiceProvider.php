@@ -14,12 +14,12 @@ class ProjectServiceProvider extends ServiceProvider {
         $this->loadMigrationsFrom(__DIR__. '/Database/Migrations');
 
         $this->publishes([
-            __DIR__.'/../Database/Migrations/' => database_path('migrations')
-        ], 'migrations');
-
-        $this->publishes([
             __DIR__.'/../Database/Seeders/' => database_path('seeders')
         ], 'seeders');
+
+        $this->publishes([
+            __DIR__.'/../Database/Migrations/' => database_path('migrations')
+        ], 'migrations');
 
     }
 
