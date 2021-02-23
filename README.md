@@ -20,7 +20,7 @@ composer require tritiyo/project
 ```
 "autoload-dev": {
     "psr-4": {
-        "Tritiyo\\Projects\\":"vendor/tritiyo/project/src/"
+        "Tritiyo\\Project\\":"vendor/tritiyo/project/src/"
     }
 },
 ```
