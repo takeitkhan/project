@@ -4,6 +4,8 @@ namespace Tritiyo\Project\Http\Controllers;
 
 use Tritiyo\Project\Models\Project;
 use Tritiyo\Project\Repositories\Project\ProjectInterface;
+use Tritiyo\Site\Models\Site;
+use Tritiyo\Site\Repositories\SiteInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
@@ -14,14 +16,16 @@ class ProjectController extends Controller
      * @var ProjectInterface
      */
     private $project;
+    private $site;
 
     /**
      * RoutelistController constructor.
      * @param ProjectInterface $project
      */
-    public function __construct(ProjectInterface $project)
+    public function __construct(ProjectInterface $project, SiteInterface $site)
     {
         $this->project = $project;
+        $this->site = $site;
     }
 
     /**
@@ -104,7 +108,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        return view('project::show', ['project' => $project]);
     }
 
     /**
@@ -165,8 +169,16 @@ class ProjectController extends Controller
      * @param \App\Models\Project $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $project)
+    public function destroy($id)
     {
-        //
+        $this->project->delete($id);
+        return redirect()->back()->with(['status' => 1, 'message' => 'Successfully deleted']);
+    }
+
+
+    public function site($id){
+        $projectId = $id;
+        $sites = $this->site->getByAny('project_id', $id);
+        return view('project::site', ['sites' => $sites, 'projectId' => $projectId]);
     }
 }

@@ -39,9 +39,18 @@ composer require tritiyo/project
 php artisan migrate
 ```
 
-#### Seeds for route data
+#### Seeds for route data to DatabaseSeeder.php under database/seeders directory
 
 ```
-php artisan db:seed --class="\vendor\tritiyo\project\src\Database\Seeders\ProjectModuleSeeder"
+public function run()
+{
+    $this->call(ProjectModuleSeeder::class)
+}
+
+```
+
+#### Run seed
+```
+php artisan db:seed
 ```
 

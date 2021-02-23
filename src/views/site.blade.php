@@ -1,14 +1,13 @@
 @extends('layouts.app')
 
 @section('title')
-    Projects
+    Site Of Project
 @endsection
-
 <section class="hero is-white borderBtmLight">
     <nav class="level">
         @include('component.title_set', [
-            'spTitle' => 'Projects',
-            'spSubTitle' => 'all projects here',
+            'spTitle' => 'All site under this project',
+            'spSubTitle' => 'view all site',
             'spShowTitleSet' => true
         ])
 
@@ -30,55 +29,59 @@
 </section>
 
 @section('column_left')
-    <div class="columns is-multiline">
-        @if(!empty($projects))
-            @foreach($projects as $project)
+    <article class="panel is-primary">
+        <p class="panel-tabs">
+            <a href="{{ route('projects.show', $projectId) }}">
+                <i class="fas fa-list"></i>&nbsp;  Project Data
+            </a>
+            <a href="javascript:void(0)" class="is-active">
+                <i class="fas fa-list"></i>&nbsp; Site of project
+            </a>
+        </p>
+        <br/>
+        @if(!empty($sites))
+        <div class="columns is-multiline">
+            @foreach($sites as $site)
                 <div class="column is-4">
                     <div class="borderedCol">
                         <article class="media">
-                            <div class="media-content">
+                        <div class="media-content">
                                 <div class="content">
                                     <p>
                                         <strong>
-                                            <a href="{{ route('projects.show', $project->id) }}"
+                                            <a href="{{ route('sites.show', $site->id) }}"
                                                title="View route">
-                                                {{ $project->name }}
+                                               <strong>Location: </strong>  {{ $site->location }},
                                             </a>
                                         </strong>
+                                        <br/>
                                         <small>
-                                            <strong>Code: </strong> {{ $project->code }},
-                                            <strong>Type: </strong> {{ $project->type }}
+                                            <strong>Code: </strong> {{ $site->site_code }},
+                                            <strong>Project: </strong> 
+                                            @php $project = \Tritiyo\Project\Models\Project::where('id', $site->project_id)->first() @endphp
+                                            {{  $project->name }}
                                         </small>
                                         <br/>
                                         <small>
-                                            <strong>Manager:</strong> {{ $project->manager }},
-                                            <strong>Customer:</strong> {{ $project->customer }},
-                                            <strong>Vendor:</strong> {{ $project->vendor }},
-                                            <strong>Supplier:</strong> {{ $project->supplier }}
-                                        </small>
-                                        <br/>
-                                        <small>
-                                            <strong>Budget:</strong> {{ $project->budget }},
-                                            <strong>Start:</strong> {{ $project->start }},
-                                            <strong>End:</strong> {{ $project->end }}
+                                            <strong>Budget:</strong> {{ $site->budget }}
                                         </small>
                                         <br/>
                                     </p>
                                 </div>
                                 <nav class="level is-mobile">
                                     <div class="level-left">
-                                        <a href="#"
+                                        <a href="{{ route('sites.show', $site->id) }}"
                                            class="level-item"
                                            title="View user data">
                                             <span class="icon is-small"><i class="fas fa-eye"></i></span>
                                         </a>
-                                        <a href="{{ route('projects.edit', $project->id) }}"
+                                        <a href="{{ route('sites.edit', $site->id) }}"
                                            class="level-item"
                                            title="View all transaction">
                                             <span class="icon is-info is-small"><i class="fas fa-edit"></i></span>
-                                        </a>
-                                       
-                                        {!! delete_data('projects.destroy',  $project->id) !!}
+                                        </a>                                        
+
+                                        {!! delete_data('sites.destroy',  $site->id) !!}
                                     </div>
                                 </nav>
                             </div>
@@ -86,6 +89,7 @@
                     </div>
                 </div>
             @endforeach
+        </div>
         @endif
-    </div>
+    </article>
 @endsection
