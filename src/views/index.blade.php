@@ -79,7 +79,7 @@
                                             <span class="icon is-info is-small"><i class="fas fa-edit"></i></span>
                                         </a>
 
-                                        {!! delete_data('projects.destroy',  $project->id) !!}
+                                        {{--                                        {!! delete_data('projects.destroy',  $project->id) !!}--}}
                                     </div>
                                 </nav>
                             </div>
