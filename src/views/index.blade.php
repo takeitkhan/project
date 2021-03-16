@@ -42,7 +42,7 @@
                                     <p>
                                         <strong>
                                             <a href="{{ route('projects.show', $project->id) }}"
-                                               title="View route">
+                                               title="View project">
                                                 {{ $project->name }}
                                             </a>
                                         </strong>
@@ -68,9 +68,9 @@
                                 </div>
                                 <nav class="level is-mobile">
                                     <div class="level-left">
-                                        <a href="#"
+                                        <a href="{{ route('projects.show', $project->id) }}"
                                            class="level-item"
-                                           title="View user data">
+                                           title="View project">
                                             <span class="icon is-small"><i class="fas fa-eye"></i></span>
                                         </a>
                                         <a href="{{ route('projects.edit', $project->id) }}"
