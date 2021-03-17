@@ -73,11 +73,13 @@
                                            title="View project">
                                             <span class="icon is-small"><i class="fas fa-eye"></i></span>
                                         </a>
-                                        <a href="{{ route('projects.edit', $project->id) }}"
-                                           class="level-item"
-                                           title="View all transaction">
-                                            <span class="icon is-info is-small"><i class="fas fa-edit"></i></span>
-                                        </a>
+                                        @if(auth()->user()->isAdmin(auth()->user()->id))
+                                            <a href="{{ route('projects.edit', $project->id) }}"
+                                               class="level-item"
+                                               title="View all transaction">
+                                                <span class="icon is-info is-small"><i class="fas fa-edit"></i></span>
+                                            </a>
+                                        @endif
 
                                         {{--                                        {!! delete_data('projects.destroy',  $project->id) !!}--}}
                                     </div>
