@@ -34,7 +34,7 @@
     <div class="columns is-multiline">
         @if(!empty($projects))
             @foreach($projects as $project)
-                <div class="column is-4">
+                <div class="column is-3">
                     <div class="borderedCol">
                         <article class="media">
                             <div class="media-content">
@@ -46,22 +46,31 @@
                                                 {{ $project->name }}
                                             </a>
                                         </strong>
+                                        <br/>
                                         <small>
-                                            <strong>Code: </strong> {{ $project->code }},
-                                            <strong>Type: </strong> {{ $project->type }}
+                                        <strong>
+                                            Type: </strong> {{ $project->type }}
+                                            <br/>
+                                            <strong>Manager:</strong> 
+                                            {{ \App\Models\User::where('id', $project->manager)->first()->name }}
+                                            ({{ $project->manager }})
+                                            <!-- <strong>Code: </strong> {{ $project->code }}, -->                                        
                                         </small>
                                         <br/>
                                         <small>
-                                            <strong>Manager:</strong> {{ $project->manager }},
-                                            <strong>Customer:</strong> {{ $project->customer }},
-                                            <strong>Vendor:</strong> {{ $project->vendor }},
-                                            <strong>Supplier:</strong> {{ $project->supplier }}
+                                            
+                                            <strong>Customer:</strong> {{ $project->customer }}
+                                            <!-- <strong>Vendor:</strong> {{ $project->vendor }},
+                                            <strong>Supplier:</strong> {{ $project->supplier }} -->
                                         </small>
                                         <br/>
                                         <small>
-                                            <strong>Budget:</strong> {{ $project->budget }},
-                                            <strong>Start:</strong> {{ $project->start }},
-                                            <strong>End:</strong> {{ $project->end }}
+                                            <strong>Budget:</strong> {{ $project->budget }}
+                                            <br/>
+                                            <strong>Total used from budget:</strong>
+                                            {{ $project->budget }}
+                                            <!-- <strong>Start:</strong> {{ $project->start }},
+                                            <strong>End:</strong> {{ $project->end }} -->
                                         </small>
                                         <br/>
                                     </p>
@@ -90,5 +99,8 @@
                 </div>
             @endforeach
         @endif
+    </div>
+    <div class="pagination_wrap pagination is-centered">
+        {{$projects->links('pagination::bootstrap-4')}}
     </div>
 @endsection
