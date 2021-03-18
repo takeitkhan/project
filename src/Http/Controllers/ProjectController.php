@@ -181,4 +181,24 @@ class ProjectController extends Controller
         $sites = $this->site->getByAny('project_id', $id);
         return view('project::site', ['sites' => $sites, 'projectId' => $projectId]);
     }
+
+
+
+
+    public function search(Request $request) {
+
+        if(!empty($request->key)) {
+            $default = [
+                'search_key' => $request->key ?? '',
+                'limit' => 10,
+                'offset' => 0
+            ];  
+            //dd($default);      
+            $projects = $this->project->getDataByFilter($default);         
+            //dd($projects);   
+        } else {
+            $projects = $this->project->getAll();        
+        }
+        return view('project::index', ['projects' => $projects]);        
+    }
 }

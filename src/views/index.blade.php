@@ -24,6 +24,9 @@
         @include('component.filter_set', [
             'spShowFilterSet' => true,
             'spPlaceholder' => 'Search projects...',
+            'spAddUrl' => route('projects.create'),
+            'spAllData' => route('projects.index'),
+            'spSearchData' => route('projects.search'),
             'spMessage' => $message = $message ?? NULl,
             'spStatus' => $status = $status ?? NULL
         ])
