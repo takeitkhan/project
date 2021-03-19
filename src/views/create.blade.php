@@ -2,7 +2,15 @@
 @section('title')
     Create Project
 @endsection
-
+@if(auth()->user()->isAdmin(auth()->user()->id) || auth()->user()->isApprover(auth()->user()->id))
+    @php
+        $addUrl = route('projects.create');
+    @endphp
+@else
+    @php
+        $addUrl = '#';
+    @endphp
+@endif
 <section class="hero is-white borderBtmLight">
     <nav class="level">
         @include('component.title_set', [
@@ -14,7 +22,7 @@
         @include('component.button_set', [
             'spShowButtonSet' => true,
             'spAddUrl' => null,
-            'spAddUrl' => route('projects.create'),
+            'spAddUrl' => $addUrl,
             'spAllData' => route('projects.index'),
             'spSearchData' => route('projects.search'),
             'spTitle' => 'Projects',

@@ -2,7 +2,7 @@
 
 use Tritiyo\Project\Http\Controllers\ProjectController;
 
-Route::group(['middleware' => ['web', 'role:1,3,7']], function () {
+Route::group(['middleware' => ['web', 'role:1,3,7,8']], function () {
     Route::any('projects/search', [ProjectController::class, 'search'])->name('projects.search');
     Route::any('projects/site/{id}', [ProjectController::class, 'site'])->name('projects.site');
 

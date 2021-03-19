@@ -1,22 +1,32 @@
 @extends('layouts.app')
 
 @section('title')
-    Site Of Project
+    Sites Of Project
 @endsection
+@if(auth()->user()->isAdmin(auth()->user()->id) || auth()->user()->isApprover(auth()->user()->id))
+    @php
+        $addUrl = route('projects.create');
+    @endphp
+@else
+    @php
+        $addUrl = '#';
+    @endphp
+@endif
 <section class="hero is-white borderBtmLight">
     <nav class="level">
         @include('component.title_set', [
-            'spTitle' => 'All site under this project',
-            'spSubTitle' => 'view all site',
+            'spTitle' => 'Sites Of Project',
+            'spSubTitle' => 'view all sites of current project',
             'spShowTitleSet' => true
         ])
 
         @include('component.button_set', [
             'spShowButtonSet' => true,
             'spAddUrl' => null,
-            'spAddUrl' => route('projects.create'),
+            'spAddUrl' => $addUrl,
             'spAllData' => route('projects.index'),
             'spSearchData' => route('projects.search'),
+            'spTitle' => 'Projects',
         ])
 
         @include('component.filter_set', [
@@ -75,13 +85,16 @@
                                            title="View user data">
                                             <span class="icon is-small"><i class="fas fa-eye"></i></span>
                                         </a>
-                                        <a href="{{ route('sites.edit', $site->id) }}"
-                                           class="level-item"
-                                           title="View all transaction">
-                                            <span class="icon is-info is-small"><i class="fas fa-edit"></i></span>
-                                        </a>                                        
 
-                                        {!! delete_data('sites.destroy',  $site->id) !!}
+                                        @if(auth()->user()->isAdmin(auth()->user()->id) || auth()->user()->isApprover(auth()->user()->id))
+                                            <a href="{{ route('sites.edit', $site->id) }}"
+                                            class="level-item"
+                                            title="View all transaction">
+                                                <span class="icon is-info is-small"><i class="fas fa-edit"></i></span>
+                                            </a>
+                                        @endif
+
+                                        {{-- {!! delete_data('sites.destroy',  $site->id) !!} --}}
                                     </div>
                                 </nav>
                             </div>
