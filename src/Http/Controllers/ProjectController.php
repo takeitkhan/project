@@ -176,8 +176,8 @@ class ProjectController extends Controller
     }
 
 
-    public function site($id) {        
-        $sites = $this->site->getByAnyWithPaginate('project_id', $id);        
+    public function site($id) {
+        $sites = $this->site->getByAnyWithPaginate('project_id', $id);
         return view('project::site', ['sites' => $sites, 'projectId' => $id]);
     }
 
@@ -191,13 +191,13 @@ class ProjectController extends Controller
                 'search_key' => $request->key ?? '',
                 'limit' => 10,
                 'offset' => 0
-            ];  
-            //dd($default);      
-            $projects = $this->project->getDataByFilter($default);         
-            //dd($projects);   
+            ];
+            //dd($default);
+            $projects = $this->project->getDataByFilter($default);
+            //dd($projects);
         } else {
-            $projects = $this->project->getAll();        
+            $projects = $this->project->getAll();
         }
-        return view('project::index', ['projects' => $projects]);        
+        return view('project::index', ['projects' => $projects]);
     }
 }
