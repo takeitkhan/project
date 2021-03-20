@@ -176,10 +176,9 @@ class ProjectController extends Controller
     }
 
 
-    public function site($id){
-        $projectId = $id;
-        $sites = $this->site->getByAny('project_id', $id);
-        return view('project::site', ['sites' => $sites, 'projectId' => $projectId]);
+    public function site($id) {        
+        $sites = $this->site->getByAnyWithPaginate('project_id', $id);        
+        return view('project::site', ['sites' => $sites, 'projectId' => $id]);
     }
 
 

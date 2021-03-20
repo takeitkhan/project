@@ -52,56 +52,62 @@
         @if(!empty($sites))
         <div class="columns is-multiline">
             @foreach($sites as $site)
-                <div class="column is-4">
+                <div class="column is-3">
                     <div class="borderedCol">
                         <article class="media">
-                        <div class="media-content">
+                            <div class="media-content">
                                 <div class="content">
                                     <p>
-                                        <strong>
-                                            <a href="{{ route('sites.show', $site->id) }}"
-                                               title="View route">
-                                               <strong>Location: </strong>  {{ $site->location }},
-                                            </a>
-                                        </strong>
-                                        <br/>
                                         <small>
-                                            <strong>Code: </strong> {{ $site->site_code }},
+                                            <strong>Code: </strong>
+                                            <a href="{{ route('sites.show', $site->id) }}"
+                                                target="_blank"
+                                                title="View route">
+                                                {{ $site->site_code }}
+                                            </a>
+                                        </small>                                        
+                                        <br/>
+                                        
+                                        <strong>Location: </strong>                                        
+                                                {{ $site->location }}                   
+                                        <br/>
+                                        <small>                                            
                                             <strong>Project: </strong> 
                                             @php $project = \Tritiyo\Project\Models\Project::where('id', $site->project_id)->first() @endphp
-                                            {{  $project->name }}
-                                        </small>
-                                        <br/>
-                                        <small>
-                                            <strong>Budget:</strong> {{ $site->budget }}
-                                        </small>
-                                        <br/>
-                                    </p>
-                                </div>
-                                <nav class="level is-mobile">
-                                    <div class="level-left">
-                                        <a href="{{ route('sites.show', $site->id) }}"
-                                           class="level-item"
-                                           title="View user data">
-                                            <span class="icon is-small"><i class="fas fa-eye"></i></span>
-                                        </a>
-
-                                        @if(auth()->user()->isAdmin(auth()->user()->id) || auth()->user()->isApprover(auth()->user()->id))
-                                            <a href="{{ route('sites.edit', $site->id) }}"
-                                            class="level-item"
-                                            title="View all transaction">
-                                                <span class="icon is-info is-small"><i class="fas fa-edit"></i></span>
+                                            <a href="{{ route('projects.show', $site->project_id) }}"                                                
+                                                title="View route">
+                                                {{  $project->name }}
                                             </a>
-                                        @endif
+                                        </small>                                        
+                                    </p>
+                                    <nav class="level is-mobile">
+                                        <div class="level-left">
+                                            <a href="{{ route('sites.show', $site->id) }}"
+                                                class="level-item"
+                                                title="View user data">
+                                                <span class="icon is-small"><i class="fas fa-eye"></i></span>
+                                            </a>
 
-                                        {{-- {!! delete_data('sites.destroy',  $site->id) !!} --}}
-                                    </div>
-                                </nav>
+                                            @if(auth()->user()->isAdmin(auth()->user()->id) || auth()->user()->isApprover(auth()->user()->id))
+                                                <a href="{{ route('sites.edit', $site->id) }}"
+                                                class="level-item"
+                                                title="View all transaction">
+                                                    <span class="icon is-info is-small"><i class="fas fa-edit"></i></span>
+                                                </a>
+                                            @endif
+
+                                            {{-- {!! delete_data('sites.destroy',  $site->id) !!} --}}
+                                        </div>
+                                    </nav>
+                                </div>
                             </div>
                         </article>
                     </div>
                 </div>
             @endforeach
+        </div>
+        <div class="pagination_wrap pagination is-centered">
+            {{ $sites->links('pagination::bootstrap-4') }}
         </div>
         @endif
     </article>

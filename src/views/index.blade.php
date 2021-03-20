@@ -77,12 +77,7 @@
                                         </small>
                                         <br/>
                                         <small>
-                                            <strong>Budget:</strong> {{ $project->budget }}
-                                            <br/>
-                                            <strong>Total used from budget:</strong>
-                                            {{ $project->budget }}
-                                            <!-- <strong>Start:</strong> {{ $project->start }},
-                                            <strong>End:</strong> {{ $project->end }} -->
+                                            <strong>Budget:</strong> BDT. {{ $project->budget }}                                                                               
                                         </small>
                                         <br/>
                                     </p>
