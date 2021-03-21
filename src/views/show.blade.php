@@ -44,22 +44,23 @@
     <article class="panel is-primary">
 
         <p class="panel-tabs">
-            <a href="javascript:void(0" class="is-active">
-                <i class="fas fa-list"></i>&nbsp;  Project Data
+            <a href="javascript:void(0)" class="is-active">
+                <i class="fas fa-list"></i>&nbsp; Project Data
             </a>
             <a href="{{ route('projects.site', $project->id) }}">
                 <i class="fas fa-list"></i>&nbsp; Site of project
             </a>
         </p>
 
-        <div class="card tile is-child">            
+        <div class="card tile is-child">
             <div class="card-content">
                 <div class="card-data">
 
-                    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="text-align: left;">
+                    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
+                           style="text-align: left;">
                         <tr>
                             <td colspan="4">
-                                Project Information
+                                <strong>Project Information</strong>
                             </td>
                         </tr>
 
@@ -67,20 +68,26 @@
                             <td colspan="4">
                                 <table class="table is-bordered is-striped is-narrow is-fullwidth">
                                     <tr>
-                                        <td>
-                                            
-                                            <div class="tag is-success has-text-white" style="font-size: 16px;">
-                                                Total Running Site: {{ status_based_count($project->id, 'Running') }}
-                                                
-                                            </div>                                            
+                                        <td width="25%">
+                                            <div class="tag is-dark has-text-white" style="font-size: 16px; width: 100%;">
+                                                Total Sites:
+                                                {{ \Tritiyo\Site\Models\Site::where('project_id', $project->id)->count() }}
+                                            </div>
                                         </td>
-                                        <td>
-                                            <div class="tag is-link has-text-white" style="font-size: 16px;">
-                                                Total Completed Site: {{ status_based_count($project->id, 'Completed') }}
+                                        <td width="25%">
+                                            <div class="tag is-success has-text-white" style="font-size: 16px; width: 100%;">
+                                                Total Running Site: {{ status_based_count($project->id, 'Running') }}
+
+                                            </div>
+                                        </td>
+                                        <td width="25%">
+                                            <div class="tag is-link has-text-white" style="font-size: 16px; width: 100%;">
+                                                Total Completed
+                                                Site: {{ status_based_count($project->id, 'Completed') }}
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="tag is-dark has-text-white" style="font-size: 16px;">
+                                            <div class="tag is-danger has-text-white" style="font-size: 16px; width: 100%;">
                                                 Total Rejected Site: {{ status_based_count($project->id, 'Rejected') }}
                                             </div>
                                         </td>
@@ -93,12 +100,12 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <div class="notification is-warning has-text-centered">                                    
+                                <div class="notification is-warning has-text-centered">
                                     Budget <br/>
-                                    <h1 class="title">                                        
+                                    <h1 class="title">
                                         BDT. {{ $project->budget }}
                                     </h1>
-                                  </div>
+                                </div>
                             </td>
                             <td colspan="2">
                                 <div class="notification is-link has-text-centered">
@@ -106,20 +113,20 @@
                                     <h1 class="title">
                                         @php
                                             $multiple_tasks = \Tritiyo\Task\Models\Task::where('project_id', $project->id)->get();
-                                            
+
                                             $total_requisition = [];
                                             foreach($multiple_tasks as $task) {
                                                 #SELECT * FROM `tasks` WHERE project_id = 8
                                                 $rm = new \Tritiyo\Task\Helpers\SiteHeadTotal('requisition_edited_by_accountant', $task->id);
                                                 $total_requisition[] = $rm->getTotal();
-                                            }                                            
+                                            }
                                         @endphp
 
                                         BDT. {{ array_sum($total_requisition) }}
                                     </h1>
-                                  </div>
+                                </div>
                             </td>
-                        </tr>                        
+                        </tr>
                         <tr>
                             <td colspan="4">&nbsp;</td>
                         </tr>
@@ -133,7 +140,6 @@
                             }
                         @endphp
 
-                        
 
                         <tr>
                             <td width="15%"><strong>Project Name:</strong></td>
@@ -193,7 +199,7 @@
                                 {{ $project->summary }}
                             </td>
                         </tr>
-                        
+
                     </table>
                 </div>
             </div>

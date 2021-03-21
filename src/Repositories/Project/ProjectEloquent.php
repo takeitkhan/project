@@ -34,7 +34,7 @@ class ProjectEloquent implements ProjectInterface
             'limit' => 10,
             'offset' => 0
         ];
-        $no = array_merge($default, $options);         
+        $no = array_merge($default, $options);
 
         if (!empty($no['limit'])) {
             $limit = $no['limit'];
@@ -60,7 +60,7 @@ class ProjectEloquent implements ProjectInterface
             ->orWhere('code', 'LIKE', '%'.$no['search_key'].'%')
             ->orWhere('type', 'LIKE', '%'.$no['search_key'].'%')
             ->orWhere('customer', 'LIKE', '%'.$no['search_key'].'%')
-            ->paginate('48');
+            ->paginate('30');
 
             //dd($sites);
         } else {

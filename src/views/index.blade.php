@@ -44,8 +44,18 @@
 
 @section('column_left')
     <div class="columns is-multiline">
-        @if(!empty($projects))
-            @foreach($projects as $project)
+        @php
+            if(auth()->user()->isManager(auth()->user()->id)) {
+                $manager_id = auth()->user()->id;
+                $projectsss = \DB::table('projects')
+                                ->where('projects.manager', $manager_id)
+                                ->paginate(30);
+            } else {
+                $projectsss = $projects;
+            }
+        @endphp
+        @if(!empty($projectsss))
+            @foreach($projectsss as $project)
                 <div class="column is-3">
                     <div class="borderedCol">
                         <article class="media">
@@ -60,24 +70,31 @@
                                         </strong>
                                         <br/>
                                         <small>
-                                        <strong>
-                                            Type: </strong> {{ $project->type }}
+                                            <strong>
+                                                Type: </strong> {{ $project->type }}
                                             <br/>
-                                            <strong>Manager:</strong> 
-                                            {{ \App\Models\User::where('id', $project->manager)->first()->name }}
-                                            ({{ $project->manager }})
-                                            <!-- <strong>Code: </strong> {{ $project->code }}, -->                                        
+                                            <strong>Project Manager:</strong>
+                                            @php
+                                                $pm = \Tritiyo\Project\Models\Project::where('id', $project->id)->first()->manager;
+                                                $pm_name = \App\Models\User::where('id', $pm)->first()->name;
+                                            @endphp
+                                            <a href="{{ route('hidtory.user', $pm) }}"
+                                               target="_blank"
+                                               title="View project manager">
+                                                {{ \App\Models\User::where('id', $project->manager)->first()->name }}
+                                            </a>
+{{--                                        <!-- <strong>Code: </strong> {{ $project->code }}, -->--}}
                                         </small>
                                         <br/>
                                         <small>
-                                            
+
                                             <strong>Customer:</strong> {{ $project->customer }}
-                                            <!-- <strong>Vendor:</strong> {{ $project->vendor }},
+                                        <!-- <strong>Vendor:</strong> {{ $project->vendor }},
                                             <strong>Supplier:</strong> {{ $project->supplier }} -->
                                         </small>
                                         <br/>
                                         <small>
-                                            <strong>Budget:</strong> BDT. {{ $project->budget }}                                                                               
+                                            <strong>Budget:</strong> BDT. {{ $project->budget }}
                                         </small>
                                         <br/>
                                     </p>
@@ -108,6 +125,11 @@
         @endif
     </div>
     <div class="pagination_wrap pagination is-centered">
-        {{$projects->links('pagination::bootstrap-4')}}
+
+        @if(Request::get('key'))
+            {{ $projects->appends(['key' => Request::get('key')])->links('pagination::bootstrap-4') }}
+        @else
+            {{$projects->links('pagination::bootstrap-4')}}
+        @endif
     </div>
 @endsection
