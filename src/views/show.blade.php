@@ -52,10 +52,10 @@
             </a>
         </p>
 
+
         <div class="card tile is-child">
             <div class="card-content">
                 <div class="card-data">
-
                     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth"
                            style="text-align: left;">
                         <tr>
@@ -69,25 +69,29 @@
                                 <table class="table is-bordered is-striped is-narrow is-fullwidth">
                                     <tr>
                                         <td width="25%">
-                                            <div class="tag is-dark has-text-white" style="font-size: 16px; width: 100%;">
+                                            <div class="tag is-dark has-text-white"
+                                                 style="font-size: 16px; width: 100%;">
                                                 Total Sites:
                                                 {{ \Tritiyo\Site\Models\Site::where('project_id', $project->id)->count() }}
                                             </div>
                                         </td>
                                         <td width="25%">
-                                            <div class="tag is-success has-text-white" style="font-size: 16px; width: 100%;">
+                                            <div class="tag is-success has-text-white"
+                                                 style="font-size: 16px; width: 100%;">
                                                 Total Running Site: {{ status_based_count($project->id, 'Running') }}
 
                                             </div>
                                         </td>
                                         <td width="25%">
-                                            <div class="tag is-link has-text-white" style="font-size: 16px; width: 100%;">
+                                            <div class="tag is-link has-text-white"
+                                                 style="font-size: 16px; width: 100%;">
                                                 Total Completed
                                                 Site: {{ status_based_count($project->id, 'Completed') }}
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="tag is-danger has-text-white" style="font-size: 16px; width: 100%;">
+                                            <div class="tag is-danger has-text-white"
+                                                 style="font-size: 16px; width: 100%;">
                                                 Total Rejected Site: {{ status_based_count($project->id, 'Rejected') }}
                                             </div>
                                         </td>
@@ -201,15 +205,141 @@
                         </tr>
 
                     </table>
+                    <div class="level">
+                        <div class="level-left">
+                            <strong>Project based tasks</strong>
+                        </div>
+                        <div class="level-right">
+                            <div class="level-item ">
+                                <form method="get" action="{{ route('projects.show', $project->id) }}">
+                                    @csrf
+
+                                    <div class="field has-addons">
+                                        <a href="{{ route('download_excel_project') }}?id={{ $project->id }}&daterange={{ request()->get('daterange') ?? date('Y-m-d', strtotime(date('Y-m-d'). ' - 30 days')) . ' - ' . date('Y-m-d') }}"
+                                           class="button is-primary is-small">
+                                            Download as excel
+                                        </a>
+                                        <div class="control">
+                                            <input class="input is-small" type="text" name="daterange" id="textboxID"
+                                                   value="{{ request()->get('daterange') ?? null }}">
+                                        </div>
+                                        <div class="control">
+                                            <input name="search" type="submit"
+                                                   class="button is-small is-primary has-background-primary-dark"
+                                                   value="Search"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                    <tr>
+                        <th>Task Name</th>
+                        <th>Task For</th>
+                        <th>Project Name</th>
+                        <th>Project Manager</th>
+                        <th>Site Code</th>
+                        <th>Site Head</th>
+                        <th>Requisition Approved</th>
+                        <th>Bill Approved</th>
+                    </tr>
+                    <?php //echo request()->get('daterange');?>
+                    @php
+                        if (request()->get('daterange')) {
+                                $dates = explode(' - ', request()->get('daterange'));
+                                $start = $dates[0];
+                                $end = $dates[1];
+
+                            $tasks = \Tritiyo\Task\Models\Task::where('project_id', $project->id)->whereBetween('task_for', [$start, $end])->get();
+
+
+                        } else {
+                           $start = date('Y-m-d', strtotime(date('Y-m-d'). ' - 30 days'));
+                           $end = date('Y-m-d');
+                           $tasks = \Tritiyo\Task\Models\Task::where('project_id', $project->id)->whereBetween('task_for', [$start, $end])->paginate(50);
+                        }
+                    @endphp
+
+
+                    @foreach($tasks as $task)
+                        @php
+                            $project = Tritiyo\Project\Models\Project::where('id', $task->project_id)->first();
+                            $sites = Tritiyo\Task\Models\TaskSite::leftjoin('sites', 'sites.id', 'tasks_site.site_id')->select('sites.site_code')->where('tasks_site.task_id', $task->id)->first();
+                            $task_name = $task->task_name;
+                            $task_for = $task->task_for;
+                            $project_name = $project->name;
+                            $manager_name = App\Models\User::where('id', $task->user_id)->first()->name;
+                            $site_code = $sites->site_code;
+                            $site_head = $task->site_head;
+                            $site_head_name = App\Models\User::where('id', $task->site_head)->first()->name;
+
+                            $rm = new \Tritiyo\Task\Helpers\SiteHeadTotal('requisition_edited_by_accountant', $task->id, true);
+                            $requisition_approved_total = $rm->getTotal();
+
+                            $rm = new \Tritiyo\Task\Helpers\SiteHeadTotal('bill_edited_by_accountant', $task->id, true);
+                            $bill_approved_total = $rm->getTotal();
+                        @endphp
+
+
+                        <tr>
+                            <td>
+                                <a href="{{route('tasks.show', $task->id)}}" target="__blank">
+                                    {{ $task_name }}
+                                </a>
+                            </td>
+                            <td>{{ $task_for }}</td>
+                            <td>
+                                <a target="__blank"
+                                   href="{{ route('projects.show', $project->id)}}">
+                                    {{ $project_name }}
+                                </a>
+                            </td>
+                            <td>{{ $manager_name  }}</td>
+                            <td>{{ $site_code }}</td>
+                            <td>
+                                <a href="{{ route('hidtory.user', $site_head) }}">
+                                    {{ $site_head_name }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ $requisition_approved_total }}
+                            </td>
+                            <td>
+                                {{ $bill_approved_total }}
+                            </td>
+
+                        </tr>
+                    @endforeach
+                </table>
+                <div class="pagination_wrap pagination is-centered">
+                    {{ $tasks->links('pagination::bootstrap-4') }}
                 </div>
             </div>
         </div>
+
+
+
+
+
     </article>
+
+
+
+
+    <!-- -->
+
+
+
 @endsection
 
 @section('column_right')
 
 @endsection
+
+
 @section('cusjs')
     <style type="text/css">
         .table.is-fullwidth {
@@ -218,4 +348,27 @@
             text-align: center;
         }
     </style>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+
+    <script type="text/javascript">
+        document.getElementById('textboxID').select();
+    </script>
+
+    <script>
+        $(function () {
+            $('input[name="daterange"]').daterangepicker({
+                opens: 'left',
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+            }, function (start, end, label) {
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+        });
+    </script>
+
 @endsection
+
